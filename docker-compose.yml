@@ -1,0 +1,23 @@
+# Local development database for RescueMesh.
+# Credentials come from .env (copy .env.example). Nothing is hardcoded here.
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: rescuemesh-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?set POSTGRES_USER in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-rescuemesh}
+    ports:
+      - "${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - rescuemesh-pgdata:/var/lib/postgresql/data
+      - ./backend/sql/init-test-db.sql:/docker-entrypoint-initdb.d/10-test-db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  rescuemesh-pgdata:

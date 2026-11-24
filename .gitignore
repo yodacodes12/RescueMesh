@@ -1,0 +1,15 @@
+.env
+**/.env
+node_modules/
+__pycache__/
+.venv/
+.pytest_cache/
+dist/
+build/
+*.apk
+mobile/android/app/build/
+mobile/android/.gradle/
+mobile/ios/
+
+# Auto-added by Nuvai session-start-governance-check
+.DS_Store
